@@ -25,12 +25,12 @@ const router = express.Router()
 // INDEX
 // GET /cars
 router.get('/cars', (req, res, next) => {
-    // we will allow access to view all the pets, by skipping 'requireToken'
+    // we will allow access to view all the cars, by skipping 'requireToken'
     // if we wanted to make this a protected resource, we'd just need to add that middleware as the second arg to our get(like we did in create for our post)
     Car.find()
         .populate('owner')
         .then(cars => {
-            // pets will be an array of mongoose documents
+            // cars will be an array of mongoose documents
             // so we want to turn them into POJO (plain ol' js objects)
             // remember that map returns a new array
             return cars.map(car => car.toObject())
@@ -53,7 +53,7 @@ router.get('/cars/:id', (req, res, next) => {
 
 
 // CREATE
-// POST /pets
+// POST /cars
 //temporarily removed  requireToken, from line 58
 router.post('/cars', (req, res, next) => {
     // we brought in requireToken, so we can have access to req.user
@@ -69,16 +69,17 @@ router.post('/cars', (req, res, next) => {
 })
 
 // UPDATE
-// PATCH /pets/624470c12ed7079ead53d4df
+// PATCH /cars/624470c12ed7079ead53d4df
 //requireToken,
-router.patch('/cars/:id', (req, res, next) => {
+//removeBlanks
+router.patch('/cars/:id', removeBlanks, (req, res, next) => {
     // if the client attempts to change the owner of the car, we can disallow that from the getgo
     delete req.body.owner
     // then we find the car by the id
     Car.findById(req.params.id)
     // handle our 404
         .then(handle404)
-    // requireOwnership and update the pet
+    // requireOwnership and update the car
         .then(car => {
             //requireOwnership(req, car)
 
@@ -93,10 +94,10 @@ router.patch('/cars/:id', (req, res, next) => {
 
 
 // REMOVE
-// DELETE /pets/624470c12ed7079ead53d4df
+// DELETE /cars/624470c12ed7079ead53d4df
 //requireToken,
 router.delete('/cars/:id', (req, res, next) => {
-    // then find the pet by id
+    // then find the car by id
     Car.findById(req.params.id)
     // first handle the 404 if any
         .then(handle404)

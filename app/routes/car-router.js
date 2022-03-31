@@ -70,18 +70,19 @@ router.post('/cars', (req, res, next) => {
 
 // UPDATE
 // PATCH /pets/624470c12ed7079ead53d4df
-router.patch('/pets/:id', requireToken, removeBlanks, (req, res, next) => {
-    // if the client attempts to change the owner of the pet, we can disallow that from the getgo
+//requireToken,
+router.patch('/cars/:id', (req, res, next) => {
+    // if the client attempts to change the owner of the car, we can disallow that from the getgo
     delete req.body.owner
-    // then we find the pet by the id
-    Pet.findById(req.params.id)
+    // then we find the car by the id
+    Car.findById(req.params.id)
     // handle our 404
         .then(handle404)
     // requireOwnership and update the pet
-        .then(pet => {
-            requireOwnership(req, pet)
+        .then(car => {
+            //requireOwnership(req, car)
 
-            return pet.updateOne(req.body.pet)
+            return car.updateOne(req.body.car)
         })
     // send a 204 no content if successful
         .then(() => res.sendStatus(204))
@@ -103,7 +104,7 @@ router.delete('/cars/:id', (req, res, next) => {
         .then(car => {
             // requireOwnership needs two arguments
             // these are the req, and the document itself
-           // requireOwnership(req, pet)
+           // requireOwnership(req, car)
             // delete if the middleware doesnt throw an error
             car.deleteOne()
         })

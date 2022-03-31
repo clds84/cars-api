@@ -54,11 +54,12 @@ router.get('/cars/:id', (req, res, next) => {
 
 // CREATE
 // POST /pets
-router.post('/cars', requireToken, (req, res, next) => {
+//temporarily removed  requireToken, from line 58
+router.post('/cars', (req, res, next) => {
     // we brought in requireToken, so we can have access to req.user
-    req.body.car.owner = req.user.id
+   // req.body.car.owner = req.user.id
 
-    Pet.create(req.body.car)
+    Car.create(req.body.car)
         .then(car => {
             // send a successful response like this
             res.status(201).json({ car: car.toObject() })
@@ -92,18 +93,19 @@ router.patch('/pets/:id', requireToken, removeBlanks, (req, res, next) => {
 
 // REMOVE
 // DELETE /pets/624470c12ed7079ead53d4df
-router.delete('/pets/:id', requireToken, (req, res, next) => {
+//requireToken,
+router.delete('/cars/:id', (req, res, next) => {
     // then find the pet by id
-    Pet.findById(req.params.id)
+    Car.findById(req.params.id)
     // first handle the 404 if any
         .then(handle404)
     // use requireOwnership middleware to make sure the right person is making this request
-        .then(pet => {
+        .then(car => {
             // requireOwnership needs two arguments
             // these are the req, and the document itself
-            requireOwnership(req, pet)
+           // requireOwnership(req, pet)
             // delete if the middleware doesnt throw an error
-            pet.deleteOne()
+            car.deleteOne()
         })
     // send back a 204 no content status
         .then(() => res.sendStatus(204))

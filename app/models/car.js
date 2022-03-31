@@ -45,14 +45,14 @@ const carSchema = new Schema(
 
 // virtuals go here(we'll build these later)
 // a virtual is a virtual property, that uses the data that's saved in the database, to add a property whenever we retrieve that document and convert to an object.
-carSchema.virtual('fullTitle').get(function () {
+carSchema.virtual('carInfo').get(function () {
     // we can do whatever javascripty things we want in here
     // we just need to make sure that we return some value
     // fullTitle is going to combine the name and type to build a title
     return `The ${this.make} ${this.model} is ${this.drivetrain}`
 })
 
-carSchema.virtual('isABaby').get(function() {
+carSchema.virtual('power').get(function() {
     if (this.sportMode) {
         return `This ride's got some new juice`
         } 
